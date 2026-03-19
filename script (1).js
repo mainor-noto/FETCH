@@ -52,23 +52,7 @@ fetch ("https://jsonplaceholder.typicode.com/users")
     .catch(err => console.log(err))
 
 
-// ── TODO 5 ──────────────────────────────────────
-// Label each Promise state in the comments:
-//   a) fetch("...") was just called, server hasn't responded yet
-//      State: ___________
-//   b) The server returned data and .then() ran
-//      State: ___________
-//   c) The URL was wrong, no response came back
-//      State: ___________
-// ────────────────────────────────────────────────
 
-
-// ── TODO 6 ──────────────────────────────────────
-// Write a fetch() call to:
-//   "https://jsonplaceholder.typicode.com/users"
-// Chain .then(res => res.json()).then(data => console.log(data))
-// Open DevTools (F12) → Console tab to see the result.
-// ────────────────────────────────────────────────
 
 
 // ── TODO 7 ──────────────────────────────────────
@@ -80,64 +64,46 @@ fetch ("https://jsonplaceholder.typicode.com/users")
 //   4. Build HTML and set #user-grid innerHTML
 //      Each card should show name and email.
 // ────────────────────────────────────────────────
+const fetchBtn = document.querySelector("#fetch-btn");
+const fetchsel = document.querySelector("#fetchsel");
+fetchBtn.addEventListener("click", () => {
+
+    fetch(`https://jsonplaceholder.typicode.com${endpoint}`)
+        .then(response => response.json())
+        .then(data => {
+            const item = Array.isArray(data) ? data : [data];
+            let html = "";
+            items.forEach(item => {
+                let title = "";
+                let detail = "";
+                let tag = "";
+
+                if (endpoint === "/users") {
+                    title = item.name;
+                    detail = item.email;
+                    tag = item.company?.name ?? "";
+                } else if (endpoint === "/posts") {
+                    title = item.title.slice(0, 50);
+                    detail = item.body.slice(0,80);
+                    tag = `post #${item.id}`;
+                }
+                html += `
+                <div class="user-card">
+                <div class=uc-name>${title}</div>
+                <div class="uc-email">${detail}</div>
+                ${tag ? `<span class="uc-tag">${tag}</span>` : ""}
+                </div>`;
+
+            });
+            userGrid.innerHTML = html;
+        })
+    .catch(err => console.log(err));
+});
 
 
-// ── TODO 8 ──────────────────────────────────────
-// After rendering, update #fetch-status to:
-//   "Loaded X users"   (use data.length or users.length)
-// ────────────────────────────────────────────────
 
 
-// ── TODO 9 ──────────────────────────────────────
-// After rendering cards:
-//   1. document.querySelector('#json-viewer').textContent
-//        = JSON.stringify(data, null, 2)
-//   2. Add class "open" to #json-viewer
-//   3. Add class "open" to #json-toggle
-// ────────────────────────────────────────────────
 
-
-// ── TODO 10 ─────────────────────────────────────
-// Add .catch(err => { ... }) to your fetch chain.
-// Inside it:
-//   1. Set #fetch-status text = "Error: " + err.message
-//   2. Set its style.color = "#f07178"
-//   3. Add class "open" to #error-display
-//   4. Set #error-display.textContent = err.message
-// ────────────────────────────────────────────────
-
-
-// ── TODO 11 ─────────────────────────────────────
-// Test your error handler:
-//   Change the URL to "https://fake.invalid/users"
-//   Click Fetch — confirm error appears.
-//   Then restore the real URL.
-// (No code needed here — just follow the steps.)
-// ────────────────────────────────────────────────
-
-
-// ── TODO 12 ─────────────────────────────────────
-// Update your click handler to read the dropdown:
-//   const endpoint = document.querySelector('#fetch-select').value;
-// Build the URL as:
-//   "https://jsonplaceholder.typicode.com" + endpoint
-// ────────────────────────────────────────────────
-
-
-// ── TODO 13 ─────────────────────────────────────
-// Inside your .then(data => { ... }), use if/else if
-// to render different content per endpoint:
-//   /users → name + email
-//   /posts → title.slice(0, 50) + body.slice(0, 80)
-//   /todos → title + (completed ? "✓ done" : "○ pending")
-// ────────────────────────────────────────────────
-
-
-// ── TODO 14 (BONUS) ─────────────────────────────
-// Add a number input and button to the output panel.
-// On click, fetch /users/{id} (single object, not array).
-// Render: name, email, phone, website, company.name.
-// ────────────────────────────────────────────────
 
 
 /* ── JSON toggle (wired for you) ── */
